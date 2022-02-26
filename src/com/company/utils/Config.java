@@ -1,4 +1,4 @@
-package com.company;
+package com.company.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,7 +6,7 @@ import java.util.Properties;
 
 public class Config {
 
-    public static Properties properties = createProps("config.properties");
+    public static Properties properties = createProps("../config.properties");
 
 
     private static Properties createProps(String name)
