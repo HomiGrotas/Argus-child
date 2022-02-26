@@ -1,6 +1,6 @@
 package com.company.local.timeMonitor;
 
-import com.company.ProcBuilder;
+import com.company.local.ProcBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
