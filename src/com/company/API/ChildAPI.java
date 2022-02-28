@@ -16,19 +16,26 @@ public class ChildAPI {
     {
         boolean created;
         String message;
+        JSONObject json;
 
         JsonObject bodyParams = new JsonObject();
         bodyParams.addProperty("mac_address", mac_address);
         bodyParams.addProperty("nickname", nickname);
         bodyParams.addProperty("parent_token", registration_token);
 
-        HttpResponse<JsonNode> response = Unirest.post(
-                Config.properties.getProperty("BASE_URL") + endpoint)
-                .header("Content-Type", "application/json")
-                .body(bodyParams)
-                .asJson();
+        try {
+            HttpResponse<JsonNode> response = Unirest.post(
+                            Config.properties.getProperty("BASE_URL") + endpoint)
+                    .header("Content-Type", "application/json")
+                    .body(bodyParams)
+                    .asJson();
 
-        JSONObject json = response.getBody().getObject();
+            json = response.getBody().getObject();
+        }catch (kong.unirest.UnirestException e)
+        {
+            json = new JSONObject();
+            json.put("message", "couldn't connect to server");
+        }
 
         // return (boolean success + String msg)
         if (json.has("token")){
@@ -41,7 +48,7 @@ public class ChildAPI {
             created = false;
             if (json.has("message"))
             {
-                message = json.toString();
+                message = json.getString("message");
             }
             else{
                 message = "Unknown error";
