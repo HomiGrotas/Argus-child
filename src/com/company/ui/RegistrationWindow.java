@@ -2,6 +2,7 @@ package com.company.ui;
 
 import com.company.local.Auth;
 import com.company.utils.Pair;
+import com.company.utils.ProcBuilder;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -91,7 +92,6 @@ public class RegistrationWindow extends JFrame implements ActionListener {
         infoMessage = new JLabel();
         infoMessage.setBounds(50, 420, WIDTH, 100);
         infoMessage.setFont(font2);
-        infoMessage.setForeground(new Color(218, 13, 13));
 
         // register button
         JButton register = new JButton("Register");
@@ -113,7 +113,8 @@ public class RegistrationWindow extends JFrame implements ActionListener {
         Pair<Boolean, String> success_and_msg = Auth.register(childNickname, parentToken);
         if (!success_and_msg.a)
         {
-            infoMessage.setText("infoMessage: "+success_and_msg.b);
+            infoMessage.setText("Error: "+success_and_msg.b);
+            infoMessage.setForeground(new Color(218, 13, 13));
         }
         else {
             System.out.println(success_and_msg.b);
