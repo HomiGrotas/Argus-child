@@ -3,6 +3,7 @@ package com.company.local;
 import com.company.API.ApiAuth;
 import com.company.API.ChildAPI;
 import com.company.utils.Config;
+import com.company.utils.Files;
 import com.company.utils.Pair;
 
 import java.io.File;
@@ -14,16 +15,15 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Scanner;
 
 
 public class Auth {
+    private static final String authPath = Config.properties.getProperty("DIRECTORY_NAME") + Config.properties.getProperty("AUTH_FILE_NAME");
 
     public static boolean authExists()
     {
-        String filename = Config.properties.getProperty("AUTH_FILE_NAME");
-        File authFile = new File(filename);
+        File authFile = new File(authPath);
         return authFile.exists();
     }
 
@@ -47,30 +47,12 @@ public class Auth {
         if (ApiAuth.mac_address == null || ApiAuth.static_token == null) {
             return false;
         }
-
-        boolean created = false;
-        String filename = Config.properties.getProperty("AUTH_FILE_NAME");
-        File authFile = new File(filename);
-        FileWriter fileWriter;
-
-        try {
-            created =  authFile.createNewFile();
-            if (created)
-            {
-                fileWriter = new FileWriter(filename);
-                fileWriter.write(ApiAuth.static_token);
-                fileWriter.close();
-            }
-
-        }catch (IOException ignored) {
-        }
-        return created;
+        return Files.createFile(authPath, ApiAuth.mac_address);
     }
 
     private static String loadAuth() {
         String token = null;
-        String filename = Config.properties.getProperty("AUTH_FILE_NAME");
-        File authFile = new File(filename);
+        File authFile = new File(authPath);
         try {
             Scanner scanner = new Scanner(authFile);
             token = scanner.nextLine();
@@ -87,7 +69,7 @@ public class Auth {
             byte[] mac = network.getHardwareAddress();
             StringBuilder sb = new StringBuilder();
             for (byte b : mac) {
-                sb.append(String.format("%02X%s", b, ':'));
+                sb.append(String.format("%02X%s", b, '*'));
             }
             sb.deleteCharAt(sb.length()-1);
             return sb.toString();
@@ -95,6 +77,6 @@ public class Auth {
         } catch (UnknownHostException | SocketException e) {
             e.printStackTrace();
         }
-        return null;
+        return "";
     }
 }
