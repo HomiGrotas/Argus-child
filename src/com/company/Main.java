@@ -2,7 +2,8 @@ package com.company;
 
 import com.company.local.Auth;
 import com.company.ui.*;
-
+import com.company.local.LocalMain;
+import com.company.utils.Setup;
 
 public class Main {
 
@@ -12,6 +13,7 @@ public class Main {
             try
             {
                 RegistrationWindow.create();
+                Setup.mkdir();
             }
             catch (Exception ignored)
             {
@@ -21,9 +23,10 @@ public class Main {
         else{
             if(Auth.login())
             {
-                System.out.println("Logged in successfully");
+                System.out.println("Loaded auth successfully");
+                LocalMain.run();
             }else {
-                System.out.println("Couldn't log in");
+                System.out.println("Couldn't load auth");
             }
         }
     }
