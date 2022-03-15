@@ -8,7 +8,7 @@ public class LocalMain {
     public static void run()
     {
         System.out.println("Loading data...");
-        BlockedApps.loadBlockedApps();
+        new Apps().monitorApps();
         System.out.println("Started running...");
     }
 }
