@@ -4,7 +4,6 @@ import com.company.API.BlockedAppsAPI;
 import com.company.utils.Config;
 import com.company.utils.Files;
 import com.company.utils.ProcBuilder;
-import kong.unirest.JsonNode;
 import kong.unirest.json.JSONObject;
 
 import java.io.File;
@@ -104,9 +103,5 @@ public class Apps {
             System.out.println("Closed apps: " + opened + "\n\n");
             opened = current;
         }while (true);
-    }
-
-    public static void main(String[] args) {
-        new Apps().monitorApps();
     }
 }
