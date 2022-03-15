@@ -14,11 +14,20 @@ public class BlockedAppsAPI implements API{
      * @return dict with all blocked apps
      */
     public static JSONObject getUnAllowedApps(){
-        JSONObject appsList;
-        HttpResponse<JsonNode> response = Unirest.get(
-                        base_url + endpoint).basicAuth(ApiAuth.mac_address, ApiAuth.static_token).asJson();
+        JSONObject appsList = null;
+        HttpResponse<JsonNode> response = null;
 
-        appsList =  response.getBody().getObject();
+        try {
+            response = Unirest.get(
+                    base_url + endpoint).basicAuth(ApiAuth.mac_address, ApiAuth.static_token).asJson();
+        }catch (kong.unirest.UnirestException ignored){}
+
+        if (response != null){
+            JsonNode body = response.getBody();
+            if (body != null) {
+                appsList =  body.getObject();
+            }
+        }
         return appsList;
     }
 }
