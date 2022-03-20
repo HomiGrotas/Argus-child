@@ -12,6 +12,29 @@ import unirest.shaded.com.google.gson.JsonObject;
 public class ChildAPI implements API{
     public static final String endpoint = "/child";
 
+
+    public static JSONObject getChild()
+    {
+        JSONObject childData = null;
+        HttpResponse<JsonNode> response = null;
+
+        try {
+            response = Unirest.get(
+                    base_url + endpoint)
+                    .basicAuth(ApiAuth.mac_address, ApiAuth.static_token)
+                    .asJson();
+        }catch (kong.unirest.UnirestException ignored){}
+
+        if (response != null){
+            JsonNode body = response.getBody();
+            if (body != null) {
+                childData =  body.getObject();
+            }
+        }
+
+        return childData;
+    }
+
     public static Pair<Boolean, String> createChild(String mac_address, String nickname, String registration_token)
     {
         boolean created;
