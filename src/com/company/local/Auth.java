@@ -47,7 +47,7 @@ public class Auth {
         if (ApiAuth.mac_address == null || ApiAuth.static_token == null) {
             return false;
         }
-        return Files.createFile(authPath, ApiAuth.mac_address);
+        return Files.createFile(authPath, ApiAuth.static_token);
     }
 
     private static String loadAuth() {
