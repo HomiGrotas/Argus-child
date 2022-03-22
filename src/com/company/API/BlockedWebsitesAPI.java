@@ -5,7 +5,7 @@ import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import kong.unirest.json.JSONObject;
 
-public class BlockedWebsites implements API {
+public class BlockedWebsitesAPI implements API {
     private static final String endpoint = "/blocked_websites";
 
     public static JSONObject getBlockedWebsites()
