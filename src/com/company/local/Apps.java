@@ -1,9 +1,11 @@
 package com.company.local;
 
+import com.company.API.AppsHistoryAPI;
 import com.company.API.BlockedAppsAPI;
 import com.company.utils.Config;
 import com.company.utils.Files;
 import com.company.utils.ProcBuilder;
+import com.company.utils.States;
 import kong.unirest.json.JSONObject;
 
 import java.io.File;
@@ -19,7 +21,7 @@ public class Apps {
     public Apps()
     {
         this.blockedApps = loadBlockedApps();
-        System.out.println("blocked: " + blockedApps);
+        System.out.println("Blocked apps: " + blockedApps);
         monitorApps();
     }
 
@@ -92,15 +94,27 @@ public class Apps {
 
             System.out.println("new opened apps: " + newApps);
             newApps.forEach(
+
                     app -> {
+                        boolean blocked;
                         if (blockedApps.has(app)){
                             blockApp(app);
+                            blocked = true;
+                        }else{
+                            blocked = false;
                         }
+                        AppsHistoryAPI.postNewStateApps(app, States.OPENED, blocked);
                     }
             );
 
             opened.removeAll(current);
             System.out.println("Closed apps: " + opened + "\n\n");
+            opened.forEach(
+                    app -> {
+                        AppsHistoryAPI.postNewStateApps(app, States.CLOSED, false);
+                    }
+            );
+
             opened = current;
         }while (true);
     }
