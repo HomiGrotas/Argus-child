@@ -5,11 +5,24 @@ import com.company.utils.Config;
 import kong.unirest.json.JSONObject;
 
 import java.io.*;
-import java.util.Set;
 
 
-public class Websites {
-    public static void modifyHosts(Set<String> apps){
+public class Websites extends Thread {
+    JSONObject blockedWebsites;
+    long UPDATE_RATE_SECONDS = 5;
+
+    public Websites()
+    {
+        loadBlockedWebsites();
+    }
+
+    private void addHost(String host, JSONObject hostData)
+    {
+        this.blockedWebsites.put(host, hostData);
+        modifyHosts();
+    }
+
+    private void modifyHosts(){
         File hosts = new File("c:\\windows\\system32\\drivers\\etc\\hosts");
         String ipRoute = Config.properties.getProperty("IP_ROUTE");
 
@@ -42,11 +55,10 @@ public class Websites {
             }
 
             newContent.append("# Added by argus").append(System.lineSeparator());
-            for (String app: apps) {
+            for (String app: this.blockedWebsites.keySet()) {
                 newContent.append(ipRoute).append(" ").append(app).append(System.lineSeparator());
             }
 
-            System.out.println(newContent);
             writer.write(newContent.toString());
         }
         catch (IOException ignored) {}
@@ -62,13 +74,30 @@ public class Websites {
         }
     }
 
-    public static void loadBlockedWebsites()
+    private void loadBlockedWebsites()
     {
-        JSONObject blockedWebsites = BlockedWebsitesAPI.getBlockedWebsites();
-        System.out.println("Blocked websites: " + blockedWebsites);
-        if (blockedWebsites != null) {
-            Set<String> apps = blockedWebsites.keySet();
-            modifyHosts(apps);
+        JSONObject newBlockedWebsites = BlockedWebsitesAPI.getBlockedWebsites();
+        System.out.println("Blocked websites: " + this.blockedWebsites);
+        System.out.println("new: "+ newBlockedWebsites);
+
+        if (newBlockedWebsites != null) {
+
+            // modify hosts file only if the hosts were changed
+            if (!newBlockedWebsites.equals(this.blockedWebsites)) {
+                this.blockedWebsites = newBlockedWebsites;
+                modifyHosts();
+                System.out.println("modified");
+            }
+        }
+    }
+
+    public void run()
+    {
+        while (true){
+            try {
+                loadBlockedWebsites();
+                sleep(UPDATE_RATE_SECONDS*1000);
+            } catch (InterruptedException ignored) {}
         }
     }
 }
