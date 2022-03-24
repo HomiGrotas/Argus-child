@@ -31,7 +31,14 @@ public class Auth {
     {
         Pair<Boolean, String> success_and_msg;
         success_and_msg =  ChildAPI.createChild(Auth.getMacAddress(), nickname, token);
-        success_and_msg.a = success_and_msg.a && Auth.createAuthFile();
+        boolean createdAuth = Auth.createAuthFile();
+        if (!createdAuth)
+        {
+            if (success_and_msg.b.equals("success")) {
+                success_and_msg.b = "No permission was granted in this machine";
+            }
+        }
+        success_and_msg.a = success_and_msg.a && createdAuth;
         return success_and_msg;
     }
 
