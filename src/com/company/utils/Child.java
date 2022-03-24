@@ -18,4 +18,15 @@ public class Child {
         usage_limits = childData.getJSONObject("usage_limits");
 
     }
+
+    @Override
+    public String toString() {
+        return "Child{" +
+                "id=" + id +
+                ", mac_address='" + mac_address + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", blocked=" + blocked +
+                ", usage_limits=" + usage_limits +
+                '}';
+    }
 }
