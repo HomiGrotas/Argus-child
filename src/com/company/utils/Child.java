@@ -10,13 +10,19 @@ public class Child {
     public final JSONObject usage_limits;
 
     public Child(JSONObject childData)
-    {
+    {   if (childData != null) {
         id = childData.getInt("id");
         mac_address = childData.getString("mac_address");
         nickname = childData.getString("nickname");
         blocked = childData.getBoolean("blocked");
         usage_limits = childData.getJSONObject("usage_limits");
-
+        }else{
+            id = -1;
+            mac_address = null;
+            nickname = null;
+            blocked = false;
+            usage_limits = null;
+        }
     }
 
     @Override
