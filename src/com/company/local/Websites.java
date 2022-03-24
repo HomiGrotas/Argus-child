@@ -9,7 +9,7 @@ import java.io.*;
 
 public class Websites extends Thread {
     JSONObject blockedWebsites;
-    long UPDATE_RATE_SECONDS = 5;
+    private final long UPDATE_RATE_SECONDS = 5;
 
     public Websites()
     {
