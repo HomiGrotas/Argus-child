@@ -24,14 +24,14 @@ public class LocalMain {
                     " or failed to authenticate with server");
         }
 
-        //Websites websites = new Websites();
-        //Apps apps = new Apps();
+        Websites websites = new Websites();
+        Apps apps = new Apps();
         MonitorTime monitorTime = new MonitorTime(child);
 
         System.out.println("Starting all threads...");
 
-        //apps.start();
-        //websites.start();
+        apps.start();
+        websites.start();
 
     }
 }
