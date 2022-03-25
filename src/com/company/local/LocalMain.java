@@ -21,7 +21,7 @@ public class LocalMain {
         if (child.mac_address == null ||
                 !child.mac_address.replace(":", "*").equals(ApiAuth.mac_address)){
             throw new RuntimeException("Error: No internet connection could made to server" +
-                    " or token was given to a new computer");
+                    " or failed to authenticate with server");
         }
 
         //Websites websites = new Websites();
