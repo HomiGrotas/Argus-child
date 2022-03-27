@@ -4,12 +4,13 @@ package com.company.local;
 import com.company.API.ApiAuth;
 import com.company.API.ChildAPI;
 import com.company.local.timeLimit.MonitorTime;
+import com.company.ui.TimeLimitWindow;
 import com.company.utils.Child;
 
 
 /**
  * This class is called after the client was logged
- * in successfully and started running
+ * in and started running
  */
 public class LocalMain {
     private static final Child child = new Child(ChildAPI.getChild());
@@ -32,8 +33,9 @@ public class LocalMain {
 
                 System.out.println("Starting all threads...");
 
-                apps.start();
-                websites.start();
+                //apps.start();
+                //websites.start();
+                monitorTime.start();
             }
 
     }

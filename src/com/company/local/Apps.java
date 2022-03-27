@@ -65,7 +65,7 @@ public class Apps extends Thread{
         JSONObject blockedApps = BlockedAppsAPI.getUnAllowedApps();
         String filePath = Config.properties.getProperty("DIRECTORY_NAME") + Config.properties.getProperty("BLOCKED_FILE_NAME");
 
-        // create blocked apps if got from server, else-> try to read from the server
+        // create blocked apps if got from server, else-> try to read from the file
         if (blockedApps != null) {
             Files.createFile(filePath, blockedApps.toString());
         }else
