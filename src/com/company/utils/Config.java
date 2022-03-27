@@ -6,7 +6,7 @@ import java.util.Properties;
 
 public class Config {
 
-    public static Properties properties = createProps("../config.properties");
+    public static Properties properties = createProps("/com/company/config.properties");
 
 
     private static Properties createProps(String name)

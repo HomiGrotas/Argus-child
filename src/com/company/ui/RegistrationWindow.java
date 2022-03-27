@@ -2,7 +2,6 @@ package com.company.ui;
 
 import com.company.local.Auth;
 import com.company.utils.Pair;
-import com.company.utils.ProcBuilder;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,6 +10,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 
 public class RegistrationWindow extends JFrame implements ActionListener {
@@ -42,15 +42,16 @@ public class RegistrationWindow extends JFrame implements ActionListener {
         // argus photo
         JPanel photoPanel = new JPanel();
         try {
-            File picF = new File(Path.of("./src/com/company/assets/background.png").normalize().toUri());
-            System.out.println("background picture existence: " + picF.exists());
+            URL url = RegistrationWindow.class.getResource("/com/company/assets/background.png");
+            if (url != null)
+            {
+                BufferedImage backgroundImg = ImageIO.read(url);
+                Image resizedImage = backgroundImg.getScaledInstance(800, HEIGHT, Image.SCALE_DEFAULT);
 
-            BufferedImage backgroundImg = ImageIO.read(picF);
-            Image resizedImage = backgroundImg.getScaledInstance(800, HEIGHT, Image.SCALE_DEFAULT);
-
-            JLabel pic = new JLabel(new ImageIcon(resizedImage));
-            pic.setBounds(200, 0, WIDTH, HEIGHT);
-            container.add(pic);
+                JLabel pic = new JLabel(new ImageIcon(resizedImage));
+                pic.setBounds(200, 0, WIDTH, HEIGHT);
+                container.add(pic);
+            }
         }
         catch (IOException ignored){
             photoPanel.setBackground(new Color(0));
