@@ -1,5 +1,6 @@
 package com.company.local.timeLimit;
 
+import com.company.API.ChildAPI;
 import com.company.ui.TimeLimitWindow;
 import com.company.utils.Child;
 import com.company.utils.Config;
@@ -12,40 +13,40 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MonitorTime extends Thread{
-    private final Child child;
-    private JSONObject limits;
-    private final String filePathLimits;
-    private final String getFilePathPassed;
+    private  Child child;
+    private float newLimit;
 
     public MonitorTime(@NotNull Child child){
         this.child = child;
-        this.limits = child.usage_limits;
-        this.filePathLimits = Config.properties.getProperty("LIMIT_FILE_NAME");
-        this.getFilePathPassed = Config.properties.getProperty("SPENT_FILE_NAME");
-        Files.createFile(filePathLimits, limits.toString());
-        System.out.println(limits);
+        this.newLimit = -1;
+        System.out.println(child.usage_limits);
     }
 
-    public static String getCurrentDay()
+    public MonitorTime(Child child, float time)
     {
-        String[] days = new String[]{"sunday","monday","tuesday","wednesday","thursday","friday","saturday"};
-        Date date=new Date();
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        return days[c.get(Calendar.DAY_OF_WEEK)-1];
+        this.child = child;
+        this.newLimit = time;
     }
+
 
 
     @Override
     public void run()
     {
-        String today = getCurrentDay();
-        float todayHoursLimit = this.limits.getFloat(today);
+        float todayHoursLimit;
+
+        if (this.newLimit == -1) {
+            todayHoursLimit = child.getCurrentLimit();
+        }else{
+            todayHoursLimit = this.newLimit;
+        }
+
         System.out.println("today time limit: "+todayHoursLimit);
         try {
-            sleep((long) (todayHoursLimit* 60 * 1000)); // hours * 60 sec per hour * 1000 milliseconds
+            sleep((long) (todayHoursLimit* 3600  * 1000)); // hours * 3600 sec per hour * 1000 milliseconds
             System.out.println("reached time limit");
-            TimeLimitWindow.create();
+            TimeLimitWindow.create(this.child);
+            this.interrupt();
         } catch (InterruptedException ignored) {}
     }
 }

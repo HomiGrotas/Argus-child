@@ -1,13 +1,17 @@
 package com.company.utils;
 
+import com.company.API.ChildAPI;
 import kong.unirest.json.JSONObject;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class Child {
     public final int id;
     public final String mac_address;
-    public final String nickname;
-    public final boolean blocked;
-    public final JSONObject usage_limits;
+    public  String nickname;
+    public  boolean blocked;
+    public  JSONObject usage_limits;
 
     public Child(JSONObject childData)
     {   if (childData != null) {
@@ -23,6 +27,28 @@ public class Child {
             blocked = false;
             usage_limits = null;
         }
+    }
+
+    public void refresh(){
+        JSONObject childData = ChildAPI.getChild();
+        nickname = childData.getString("nickname");
+        blocked = childData.getBoolean("blocked");
+        usage_limits = childData.getJSONObject("usage_limits");
+    }
+
+    public static String getCurrentDay()
+    {
+        String[] days = new String[]{"sunday","monday","tuesday","wednesday","thursday","friday","saturday"};
+        Date date=new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        return days[c.get(Calendar.DAY_OF_WEEK)-1];
+    }
+
+    public float getCurrentLimit()
+    {
+        String today = getCurrentDay();
+        return this.usage_limits.getFloat(today);
     }
 
     @Override

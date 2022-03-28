@@ -1,6 +1,9 @@
 package com.company.ui;
 
+import com.company.local.timeLimit.LockComputer;
 import com.company.local.timeLimit.MonitorTime;
+import com.company.utils.Child;
+import kong.unirest.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,12 +18,15 @@ import java.net.URL;
 
 public class TimeLimitWindow extends JFrame implements ActionListener {
     final String dayOpened;
+    final Child childBlocked;
 
-    public TimeLimitWindow(){
+    public TimeLimitWindow(Child childBlocked){
+        this.childBlocked = childBlocked;
+
         setTitle("Argus Child Registration");
         Font font1 = new Font("Arial", Font.PLAIN, 40);
         Font font2 = new Font("Arial", Font.PLAIN, 30);
-        dayOpened = MonitorTime.getCurrentDay();
+        dayOpened = Child.getCurrentDay();
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -55,7 +61,7 @@ public class TimeLimitWindow extends JFrame implements ActionListener {
                 Image resizedImage = backgroundImg.getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
 
                 JLabel pic = new JLabel(new ImageIcon(resizedImage));
-                pic.setBounds((int) (WIDTH/4), 0, WIDTH, HEIGHT);
+                pic.setBounds( (WIDTH/4), 0, WIDTH, HEIGHT);
                 container.add(pic);
             }
         }
@@ -101,19 +107,42 @@ public class TimeLimitWindow extends JFrame implements ActionListener {
     }
 
 
-    public static void create()
+    public static void create(Child childBlocked)
     {
-        new TimeLimitWindow();
 
+        LockComputer.lock(); // lock current machine
+        new TimeLimitWindow(childBlocked);
+
+    }
+
+    private void unlocked()
+    {
+        LockComputer.unlock();
+        setVisible(false);
+        dispose();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println("pressed for refresh");
-        if (!MonitorTime.getCurrentDay().equals(dayOpened))
-        {
-            // todo: check for change in server
+
+        if (!Child.getCurrentDay().equals(dayOpened)) {
+            // start monitor time again
             System.out.println("can count again");
+            unlocked();
+            new MonitorTime(this.childBlocked).start();
+        }
+        else{
+            float lastLimit = childBlocked.getCurrentLimit();
+            this.childBlocked.refresh();
+
+            if (lastLimit != this.childBlocked.getCurrentLimit())
+            {
+                System.out.println("can count again");
+                unlocked();
+                new MonitorTime(this.childBlocked, this.childBlocked.getCurrentLimit()-lastLimit).start();
+
+            }
         }
     }
 }

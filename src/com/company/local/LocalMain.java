@@ -3,9 +3,12 @@ package com.company.local;
 
 import com.company.API.ApiAuth;
 import com.company.API.ChildAPI;
+import com.company.local.timeLimit.LockComputer;
 import com.company.local.timeLimit.MonitorTime;
 import com.company.ui.TimeLimitWindow;
 import com.company.utils.Child;
+
+import static java.lang.Thread.sleep;
 
 
 /**
@@ -33,8 +36,8 @@ public class LocalMain {
 
                 System.out.println("Starting all threads...");
 
-                //apps.start();
-                //websites.start();
+                apps.start();
+                websites.start();
                 monitorTime.start();
             }
 
