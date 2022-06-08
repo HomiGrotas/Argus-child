@@ -5,8 +5,6 @@ import com.company.ui.*;
 import com.company.local.LocalMain;
 import com.company.utils.Setup;
 
-import javax.naming.NoPermissionException;
-
 import static com.company.utils.Privileges.IS_RUNNING_AS_ADMINISTRATOR;
 
 public class Main {

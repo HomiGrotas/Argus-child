@@ -3,6 +3,7 @@ package com.company.local;
 
 import com.company.API.ApiAuth;
 import com.company.API.ChildAPI;
+import com.company.local.aliveAndCMD.Alive;
 import com.company.local.timeLimit.LockComputer;
 import com.company.local.timeLimit.MonitorTime;
 import com.company.ui.TimeLimitWindow;
@@ -33,12 +34,14 @@ public class LocalMain {
                 Websites websites = new Websites();
                 Apps apps = new Apps();
                 MonitorTime monitorTime = new MonitorTime(child);
+                Alive alive = new Alive();
 
                 System.out.println("Starting all threads...");
 
                 apps.start();
                 websites.start();
                 monitorTime.start();
+                alive.start();
             }
 
     }

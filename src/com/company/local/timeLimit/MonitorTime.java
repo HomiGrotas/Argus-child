@@ -6,7 +6,6 @@ import com.company.utils.Child;
 import com.company.utils.Config;
 import com.company.utils.Files;
 import kong.unirest.json.JSONObject;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Calendar;
@@ -16,7 +15,7 @@ public class MonitorTime extends Thread{
     private  Child child;
     private float newLimit;
 
-    public MonitorTime(@NotNull Child child){
+    public MonitorTime(Child child){
         this.child = child;
         this.newLimit = -1;
         System.out.println(child.usage_limits);

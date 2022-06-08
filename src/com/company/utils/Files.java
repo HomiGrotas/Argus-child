@@ -25,4 +25,10 @@ public class Files {
         }
         return created;
     }
+
+    public static boolean exists(String filename)
+    {
+        File authFile = new File(filename);
+        return authFile.exists();
+    }
 }

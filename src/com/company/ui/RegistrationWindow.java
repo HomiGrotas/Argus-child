@@ -109,8 +109,8 @@ public class RegistrationWindow extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String parentToken = parentTokenF.getText();
-        String childNickname = nicknameF.getText();
+        String parentToken = parentTokenF.getText().trim();
+        String childNickname = nicknameF.getText().trim();
         Pair<Boolean, String> success_and_msg = Auth.register(childNickname, parentToken);
         if (!success_and_msg.a)
         {
