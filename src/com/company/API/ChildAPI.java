@@ -1,6 +1,5 @@
 package com.company.API;
 
-import com.company.utils.Config;
 import com.company.utils.Pair;
 
 import kong.unirest.HttpResponse;
