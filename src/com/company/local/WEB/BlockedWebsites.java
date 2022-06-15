@@ -1,25 +1,20 @@
-package com.company.local;
+package com.company.local.WEB;
 
 import com.company.API.BlockedWebsitesAPI;
 import com.company.utils.Config;
+import com.company.utils.Files;
 import kong.unirest.json.JSONObject;
 
 import java.io.*;
 
 
-public class Websites extends Thread {
+public class BlockedWebsites extends Thread {
     JSONObject blockedWebsites;
     private final long UPDATE_RATE_SECONDS = 5;
 
-    public Websites()
+    public BlockedWebsites()
     {
         loadBlockedWebsites();
-    }
-
-    private void addHost(String host, JSONObject hostData)
-    {
-        this.blockedWebsites.put(host, hostData);
-        modifyHosts();
     }
 
     private void modifyHosts(){

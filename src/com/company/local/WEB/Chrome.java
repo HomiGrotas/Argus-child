@@ -1,5 +1,6 @@
-package com.company.WEB;
+package com.company.local.WEB;
 
+import com.company.API.WebHistoryAPI;
 import com.company.utils.Config;
 import com.company.utils.Files;
 import com.company.utils.ProcBuilder;
@@ -16,6 +17,7 @@ import java.util.*;
 public class Chrome {
     private static final String historyPath = Config.properties.getProperty("DIRECTORY_NAME") +
             Config.properties.getProperty("HISTORY_INDEX_FILE_NAME");
+    public static final String chromeDbPath = "C:\\Users\\"+ System.getProperty("user.name")+"\\\\AppData\\\\Local\\\\Google\\\\Chrome\\\\User Data\\\\Default\\\\History";
 
     private final Connection conn;
 
@@ -29,7 +31,7 @@ public class Chrome {
 
         try {
             // db parameters
-            String url = "jdbc:sqlite:C:\\Users\\"+ System.getProperty("user.name")+"\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\History";
+            String url = "jdbc:sqlite:" + Config.properties.getProperty("DIRECTORY_NAME")+Config.properties.getProperty("CHROME_COPIED_DB");
 
             // create a connection to the database
             return DriverManager.getConnection(url);
@@ -80,7 +82,8 @@ public class Chrome {
 
 
             while (rst.next()){
-                System.out.println(new WebRecord(rst.getString("url"), rst.getString("title"), rst.getString("date")));
+                WebHistoryAPI.reportWebsiteHistory(rst.getString("url"), rst.getString("title"), rst.getString("date"));
+                System.out.println("Reported website- "+ rst.getString("url"));
             }
 
             // update the indexer file
@@ -112,9 +115,10 @@ public class Chrome {
         ProcBuilder.runProc(command);
     }
 
-    public static void main(String[] args) throws IOException {
-        Chrome c = new Chrome();
-        BigInteger last = c.loadLastTime();
-        c.reportHistory(last);
+    public void run()
+    {
+        Chrome chrome = new Chrome();
+        BigInteger last = chrome.loadLastTime();
+        chrome.reportHistory(last);
     }
 }

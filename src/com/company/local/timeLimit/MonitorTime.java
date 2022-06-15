@@ -1,18 +1,11 @@
 package com.company.local.timeLimit;
 
-import com.company.API.ChildAPI;
 import com.company.ui.TimeLimitWindow;
 import com.company.utils.Child;
-import com.company.utils.Config;
-import com.company.utils.Files;
-import kong.unirest.json.JSONObject;
 
-import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
 
 public class MonitorTime extends Thread{
-    private  Child child;
+    private final Child child;
     private float newLimit;
 
     public MonitorTime(Child child){
@@ -27,8 +20,6 @@ public class MonitorTime extends Thread{
         this.newLimit = time;
     }
 
-
-
     @Override
     public void run()
     {
@@ -40,9 +31,15 @@ public class MonitorTime extends Thread{
             todayHoursLimit = this.newLimit;
         }
 
-        System.out.println("today time limit: "+todayHoursLimit);
+        System.out.println("today time limit: "+todayHoursLimit + ", child spent: " + this.child.timeSpent);
         try {
-            sleep((long) (todayHoursLimit* 3600  * 1000)); // hours * 3600 sec per hour * 1000 milliseconds
+            while (todayHoursLimit > this.child.timeSpent)
+            {
+                sleep (5  * 1000); // 5 seconds * 1000 milliseconds
+                this.child.refresh();
+                todayHoursLimit = this.child.getCurrentLimit();
+                System.out.println(this.child.timeSpent+ ", " +todayHoursLimit);
+            }
             System.out.println("reached time limit");
             TimeLimitWindow.create(this.child);
             this.interrupt();

@@ -12,6 +12,7 @@ public class Child {
     public  String nickname;
     public  boolean blocked;
     public  JSONObject usage_limits;
+    public float timeSpent;
 
     public Child(JSONObject childData)
     {   if (childData != null) {
@@ -20,6 +21,7 @@ public class Child {
         nickname = childData.getString("nickname");
         blocked = childData.getBoolean("blocked");
         usage_limits = childData.getJSONObject("usage_limits");
+        timeSpent = childData.getFloat("time_spent");
         }else{
             id = -1;
             mac_address = null;
@@ -34,6 +36,7 @@ public class Child {
         nickname = childData.getString("nickname");
         blocked = childData.getBoolean("blocked");
         usage_limits = childData.getJSONObject("usage_limits");
+        timeSpent = childData.getFloat("time_spent");
     }
 
     public static String getCurrentDay()

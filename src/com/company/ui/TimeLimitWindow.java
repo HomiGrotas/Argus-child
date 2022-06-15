@@ -140,9 +140,9 @@ public class TimeLimitWindow extends JFrame implements ActionListener {
             {
                 System.out.println("can count again");
                 unlocked();
-                new MonitorTime(this.childBlocked, this.childBlocked.getCurrentLimit()-lastLimit).start();
-
+                new MonitorTime(this.childBlocked, this.childBlocked.getCurrentLimit()).start();
             }
+
         }
     }
 
